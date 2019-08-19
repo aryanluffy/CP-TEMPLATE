@@ -20,10 +20,12 @@
 #define m32it map<int,int>::iterator
 #define fastio ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0)
 #define ist insert
+#define endl "\n"
+#include <ext/pb_ds/assoc_container.hpp>
 #define p_q priority_queue 
 #define min_p_q priority_queue <int,vt <int>,greater <int>>
 using namespace std;
- 
+using namespace __gnu_pbds; 
 class UnionFind //rank is equal to number of vertices in a connected component
 {
   public: v32 p, rank;
@@ -424,7 +426,8 @@ class merge_sort_tree
 	struct node
     {
       int l,r;
-      vector <int> arr;
+      vector <pair<int,int>> arr;
+      v32 arr2;
     };
 	v32 a;
     vt <node> st; 
@@ -435,17 +438,18 @@ class merge_sort_tree
       a=b;
       build(0,b.size()-1);
     }
-    void build(int l,int r,int k=0)
+     void build(int l,int r,int k=0)
       {
         st[k].l=l,st[k].r=r;
         for(int i=l;i<r+1;i++)
-        st[k].arr.push_back(a[i]);
+        st[k].arr.push_back({a[i],i});
         sort(st[k].arr.begin(),st[k].arr.end());
+        f(i,0,st[k].arr.size())st[k].arr2.pb(st[k].arr[i].first);
         if(l==r)
         return;
         build(l,(l+r)/2,2*k+1);
         build((l+r)/2+1,r,2*k+2);
-      } 
+      }
     bool intersection(int l,int r,int ll,int rr)
     {
 	  if(ll>r || l>rr)return 0;
@@ -456,7 +460,7 @@ class merge_sort_tree
      if(l>r)return 0;
      int ll=st[k].l,rr=st[k].r,mid=(ll+rr)/2;
      if(ll>=l && rr<=r)
-     return cnt(t,st[k].arr);
+     return cnt(t,st[k].arr2);
      lli ans=0;
      if(intersection(l,r,ll,mid)==1)
      ans+=count_val_in_range(l,r,t,2*k+1);
@@ -469,7 +473,7 @@ class merge_sort_tree
      if(l>r)return 0;
      int ll=st[k].l,rr=st[k].r,mid=(ll+rr)/2;
      if(ll>=l && rr<=r)
-     return get_last_smaller(st[k].arr,t)+1;
+     return get_last_smaller(st[k].arr2,t)+1;
      lli ans=0;
      if(intersection(l,r,ll,mid)==1)
      ans+=count_vals_less_than_given_val(l,r,t,2*k+1,st);
@@ -477,6 +481,24 @@ class merge_sort_tree
      ans+=count_vals_less_than_given_val(l,r,t,2*k+2,st);
      return ans;
     }	
+    int find(int l,int r,int x,int k=0)
+    {
+     if(l>r)return -1;
+     int ll=st[k].l,rr=st[k].r,mid=(ll+rr)/2;
+     if(ll>=l && rr<=r)
+       { 
+         int p=lower_bound(st[k].arr2.begin(), st[k].arr2.end(), x)-st[k].arr2.begin();
+         if(p==st[k].arr2.size())return -1;
+         if(st[k].arr2[p]==x)return st[k].arr[p].second;
+         return -1;
+       }
+       int ans=-1;
+     if(intersection(l,r,ll,mid)==1)
+     ans=find(l,r,x,2*k+1);
+     if(ans==-1 && intersection(l,r,mid+1,rr)==1)
+     ans=find(l,r,x,2*k+2);
+     return ans;
+    }
 };
 void DEBUG_ARR(v32 a)
 {
