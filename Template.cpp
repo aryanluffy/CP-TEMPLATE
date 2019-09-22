@@ -637,7 +637,57 @@ lli modInverse(lli a, lli m)
        x += m0; 
     return x; 
 } 
- 
+struct matrix
+{
+    vector <vector <lli>>m;
+};
+class matrix
+{
+public:
+  v4096 m;
+  v4096 I;
+  matrix(v4096 x){
+    m=x;
+    I.resize(m.size());
+    f(i,0,m.size())I[i].resize(m.size());
+    f(i,0,m.size())I[i][i]=1;
+  };
+  v4096 multiply(v4096 m1,v4096 m2)
+  {
+    v4096 m3;
+    m3.resize(m1.size());
+    f(i,0,m2.size())
+      {
+          m3[i].pb(0);
+          f(j,0,m2[0].size())
+          {    m3[i][j]=0;
+               f(k,0,m1[0].size())
+                 m3[i][j]=(m3[i][j]+m1[i][k]*m2[k][j])%mod;
+          }
+      }
+      return m3;
+  }
+  v4096 exp(lli p)
+   {
+    v4096 res;
+   if(p==1)
+      return m;
+   if(p==0) return I;
+      if(p%2==0)
+      {
+          res=exp(p/2);
+          res=multiply(res,res);
+      }
+      else
+      {
+          res=exp(p/2);
+          res=multiply(res,res);
+          res=multiply(res,m);
+      }
+   return res;
+   }
+};
+
 int main() 
 { 
   fastio;
