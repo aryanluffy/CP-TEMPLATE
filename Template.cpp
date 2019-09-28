@@ -26,6 +26,13 @@
 #define min_p_q priority_queue <int,vt <int>,greater <int>>
 using namespace std;
 using namespace __gnu_pbds; 
+template <typename T> 
+void DEBUG_ARR(vt<T> a)
+{
+	f(i,0,a.size())cout<<a[i]<<" ";
+	cout<<"\n";
+}
+
 int op(int a, int b){
   return __gcd(a,b);
 };
@@ -596,11 +603,6 @@ class merge_sort_tree
      return ans;
     }
 };
-void DEBUG_ARR(v32 a)
-{
-	f(i,0,a.size())cout<<a[i]<<" ";
-	cout<<"\n";
-}
 lli tmod(lli x,lli m){return (x%m+m)%m;}//USE AT YOUR OWN RISK
 lli power(lli x, lli y) 
 {
@@ -637,10 +639,6 @@ lli modInverse(lli a, lli m)
        x += m0; 
     return x; 
 } 
-struct matrix
-{
-    vector <vector <lli>>m;
-};
 class matrix
 {
 public:
