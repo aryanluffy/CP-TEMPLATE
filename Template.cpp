@@ -170,7 +170,7 @@ class RMQv //returns max-min value in a given range
          return 0;
          return 1;
     }
-	RMQ(v32 a)
+	RMQv(v32 a)
 	{
        h=a;
        st.resize(4*h.size());
