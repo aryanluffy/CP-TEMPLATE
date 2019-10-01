@@ -154,6 +154,67 @@ class UnionFind //rank is equal to number of vertices in a connected component
  
   }   
 };
+class RMQv //returns max-min value in a given range
+{
+    public:
+	struct node
+    {
+	int mn,mx,l,r; 
+    };
+	v32 h;
+	vt <node> st;
+ 
+    bool is_intersection(int l,int r,int ll,int rr)
+    {
+       if(r<ll || rr<l)
+         return 0;
+         return 1;
+    }
+	RMQ(v32 a)
+	{
+       h=a;
+       st.resize(4*h.size());
+       build(0,h.size()-1);
+	}
+	void build(int l,int r,int k=0)
+	{
+		st[k].l=l,st[k].r=r;
+	    if(l==r)
+		   {st[k].mx=st[k].mn=h[l];
+             return;
+		   }
+	    build(l,(l+r)/2,2*k+1);
+	    build((l+r)/2+1,r,2*k+2);
+        st[k].mx=max(st[2*k+1].mx,st[2*k+2].mx); 
+	}
+	int maxquery(int l,int r,int k=0)
+    {
+       if(l>r)return -MAXN;
+       int ll=st[k].l,rr=st[k].r,mid=(ll+rr)/2;
+       if(ll>=l && rr<=r)
+          return st[k].mx;
+   	   int ans=0;   
+   	   if(!(r<ll || mid<l))
+   	      ans=maxquery(l,r,2*k+1);
+   	   if(!(r<mid+1 || rr<l))
+   	          ans=max(ans,maxquery(l,r,2*k+2));
+   	   return ans;     
+    }
+    void update(int id,int val,int k=0)
+    {
+        int l=st[k].l,r=st[k].r,mid=(l+r)/2;
+        if(l==r)
+        {
+            st[k].mx=val;
+            return;
+        }
+        if(id>=l && id<=mid)
+        update(id,val,2*k+1);
+        if(mid+1<= id && id<=r)
+        update(id,val,2*k+2);
+        st[k].mx=max(st[2*k+1].mx,st[2*k+2].mx); 
+    }
+};
 class RMQ  //gives index of min-max in a given range
 {
     public:
