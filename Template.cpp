@@ -707,21 +707,19 @@ public:
   v4096 I;
   matrix(v4096 x){
     m=x;
-    I.resize(m.size());
-    f(i,0,m.size())I[i].resize(m.size());
+    I=x;
     f(i,0,m.size())I[i][i]=1;
+    f(i,0,x.size())f(j,0,x.size())if(i!=j)I[i][j]=0;
   };
   v4096 multiply(v4096 m1,v4096 m2)
   {
-    v4096 m3;
-    m3.resize(m1.size());
+    v4096 m3=m1;
     f(i,0,m2.size())
       {
-          m3[i].pb(0);
           f(j,0,m2[0].size())
-          {    m3[i][j]=0;
-               f(k,0,m1[0].size())
-                 m3[i][j]=(m3[i][j]+m1[i][k]*m2[k][j])%mod;
+          {    
+            m3[i][j]=0;
+            f(k,0,m1[0].size()) m3[i][j]=(m3[i][j]+m1[i][k]*m2[k][j])%mod;
           }
       }
       return m3;
