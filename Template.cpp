@@ -277,8 +277,11 @@ class RMQ  //gives index of min-max in a given range
    	   if(!(r<ll || mid<l))
    	      ans=maxquery(l,r,2*k+1);
    	   if(!(r<mid+1 || rr<l))
-   	      {if(h[ans]<h[maxquery(l,r,2*k+2)])	
-   	          ans=maxquery(l,r,2*k+2);}
+   	      {
+		   int y=maxquery(l,r,2*k+2);
+		   if(h[ans]<h[y])	
+   	           ans=y;
+	      }
    	   return ans;     
     }
     void update(int id,int val,int k=0)
