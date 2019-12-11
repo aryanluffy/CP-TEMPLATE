@@ -220,7 +220,7 @@ class RMQ  //gives index of min-max in a given range
     public:
 	struct node
     {
-	int mn,mx,l,r; 
+	int mx,l,r; 
     };
 	v32 h;
 	vt <node> st;
@@ -241,65 +241,40 @@ class RMQ  //gives index of min-max in a given range
 	{
 		st[k].l=l,st[k].r=r;
 	    if(l==r)
-		   {st[k].mx=st[k].mn=l;
+		   {st[k].mx=l;
              return;
 		   }
 	    build(l,(l+r)/2,2*k+1);
-	    build((l+r)/2+1,r,2*k+2);
-	    if(h[st[2*k+1].mn]<=h[st[2*k+2].mn])
-	    st[k].mn=st[2*k+1].mn;
-	    else st[k].mn=st[2*k+2].mn;	
-        if(h[st[2*k+1].mx]>=h[st[2*k+2].mx])
+	    build((l+r)/2+1,r,2*k+2);	
+      if(h[st[2*k+1].mx]>=h[st[2*k+2].mx])
 	    st[k].mx=st[2*k+1].mx;
 	    else st[k].mx=st[2*k+2].mx;
 	}
-    int minquery(int l,int r,int k=0)
-    {
-        if(l>r)return MAXN;
-        int ll=st[k].l,rr=st[k].r,mid=(ll+rr)/2;
-        if(ll>=l && rr<=r)
-         return st[k].mn;
-   	    int ans=l;   
-   	    if(!(r<ll || mid<l))
-   	       ans=minquery(l,r,2*k+1);
-   	    if(!(r<mid+1 || rr<l))
-   	     {if(h[ans]>h[minquery(l,r,2*k+2)])	
-   	       ans=minquery(l,r,2*k+2);}
-   	    return ans;     
-    }
 	int maxquery(int l,int r,int k=0)
     {
-       if(l>r)return -MAXN;
-       int ll=st[k].l,rr=st[k].r,mid=(ll+rr)/2;
+       int ll=st[k].l,rr=st[k].r,mid=(ll+rr)>>1;
+       if(r<ll || rr<l)return -1; 
        if(ll>=l && rr<=r)
           return st[k].mx;
-   	   int ans=l;   
-   	   if(!(r<ll || mid<l))
-   	      ans=maxquery(l,r,2*k+1);
-   	   if(!(r<mid+1 || rr<l))
-   	      {
-		   int y=maxquery(l,r,2*k+2);
-		   if(h[ans]<h[y])	
-   	           ans=y;
-	      }
-   	   return ans;     
+   	      int p1=maxquery(l,r,2*k+1);
+   	      int p2=maxquery(l,r,2*k+2);
+       if(p1==-1)return st[k].mx=p2;
+       if(p2==-1)return st[k].mx=p1;
+       if(h[p1]>=h[p2])return st[k].mx=p1;
+       return st[k].mx=p2;      
     }
     void update(int id,int val,int k=0)
     {
-        int l=st[k].l,r=st[k].r,mid=(l+r)/2;
+        int l=st[k].l,r=st[k].r,mid=(l+r)>>2;
+        if(id<l || id>r)return;
         if(l==r)
         {
             h[l]=val;
             return;
         }
-        if(id>=l && id<=mid)
         update(id,val,2*k+1);
-        if(mid+1<= id && id<=r)
-        update(id,val,2*k+2);
-        if(h[st[2*k+1].mn]<=h[st[2*k+2].mn])
-	    st[k].mn=st[2*k+1].mn;
-	    else st[k].mn=st[2*k+2].mn;	
-        if(h[st[2*k+1].mx]>=h[st[2*k+2].mx])
+        update(id,val,2*k+2);	
+      if(h[st[2*k+1].mx]>=h[st[2*k+2].mx])
 	    st[k].mx=st[2*k+1].mx;
 	    else st[k].mx=st[2*k+2].mx;
     }
