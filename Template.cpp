@@ -185,14 +185,14 @@ class RMQv //returns max-min value in a given range
 		   {st[k].mx=st[k].mn=h[l];
              return;
 		   }
-	    build(l,(l+r)/2,2*k+1);
-	    build((l+r)/2+1,r,2*k+2);
+	    build(l,(l+r)>>1,2*k+1);
+	    build(((l+r)>>1)+1,r,2*k+2);
         st[k].mx=max(st[2*k+1].mx,st[2*k+2].mx); 
 	}
 	int maxquery(int l,int r,int k=0)
     {
        if(l>r)return -MAXN;
-       int ll=st[k].l,rr=st[k].r,mid=(ll+rr)>>2;
+       int ll=st[k].l,rr=st[k].r,mid=(ll+rr)>>1;
        if(r<ll || l>rr)return -MAXN;
        if(ll>=l && rr<=r)
           return st[k].mx;
@@ -203,7 +203,7 @@ class RMQv //returns max-min value in a given range
     }
     void update(int id,int val,int k=0)
     {
-        int l=st[k].l,r=st[k].r,mid=(l+r)>>2;
+        int l=st[k].l,r=st[k].r,mid=(l+r)>>1;
         if(id<l || id>r)return;
         if(l==r)
         {
@@ -244,8 +244,8 @@ class RMQ  //gives index of min-max in a given range
 		   {st[k].mx=l;
              return;
 		   }
-	    build(l,(l+r)/2,2*k+1);
-	    build((l+r)/2+1,r,2*k+2);	
+	    build(l,(l+r)>>1,2*k+1);
+	    build(((l+r)>>1)+1,r,2*k+2);	
       if(h[st[2*k+1].mx]>=h[st[2*k+2].mx])
 	    st[k].mx=st[2*k+1].mx;
 	    else st[k].mx=st[2*k+2].mx;
@@ -265,7 +265,7 @@ class RMQ  //gives index of min-max in a given range
     }
     void update(int id,int val,int k=0)
     {
-        int l=st[k].l,r=st[k].r,mid=(l+r)>>2;
+        int l=st[k].l,r=st[k].r,mid=(l+r)>>1;
         if(id<l || id>r)return;
         if(l==r)
         {
