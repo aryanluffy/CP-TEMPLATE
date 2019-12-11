@@ -190,27 +190,25 @@ class RMQv //returns max-min value in a given range
 	int maxquery(int l,int r,int k=0)
     {
        if(l>r)return -MAXN;
-       int ll=st[k].l,rr=st[k].r,mid=(ll+rr)/2;
+       int ll=st[k].l,rr=st[k].r,mid=(ll+rr)>>2;
+       if(r<ll || l>rr)return -MAXN;
        if(ll>=l && rr<=r)
           return st[k].mx;
-   	   int ans=0;   
-   	   if(!(r<ll || mid<l))
-   	      ans=maxquery(l,r,2*k+1);
-   	   if(!(r<mid+1 || rr<l))
-   	          ans=max(ans,maxquery(l,r,2*k+2));
+   	   int ans=-MAXN;   
+   	   ans=maxquery(l,r,2*k+1);
+   	   ans=max(ans,maxquery(l,r,2*k+2));
    	   return ans;     
     }
     void update(int id,int val,int k=0)
     {
-        int l=st[k].l,r=st[k].r,mid=(l+r)/2;
+        int l=st[k].l,r=st[k].r,mid=(l+r)>>2;
+        if(id<l || id>r)return;
         if(l==r)
         {
             st[k].mx=val;
             return;
         }
-        if(id>=l && id<=mid)
         update(id,val,2*k+1);
-        if(mid+1<= id && id<=r)
         update(id,val,2*k+2);
         st[k].mx=max(st[2*k+1].mx,st[2*k+2].mx); 
     }
