@@ -22,6 +22,8 @@
 #define ist insert
 #define endl "\n"
 #include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+#define ordered_set tree<int, null_type,less<int>, rb_tree_tag,tree_order_statistics_node_update> 
 #define p_q priority_queue 
 #define min_p_q priority_queue <int,vt <int>,greater <int>>
 using namespace std;
