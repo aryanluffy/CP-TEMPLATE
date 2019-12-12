@@ -294,12 +294,6 @@ class LAZY //currently set to set a given range by a value
    	  st.resize(4*h.size());
    	  cst(0,h.size()-1);
    }	
-   int intersectiontype1(int l,int r,int ll,int rr)
-   { 
-      	if(r<ll || rr<l)
-        return 0;
-        return 1;
-   }
    void cst(int l,int r,int k=0)
    {
     st[k].l=l,st[k].r=r;
@@ -325,37 +319,29 @@ class LAZY //currently set to set a given range by a value
    }
    lli query(int l,int r,int k=0)
    {
-	if(st[k].lazy!=0)
-       shift(k);
-   int ll=st[k].l,rr=st[k].r,mid=(ll+rr)/2;
-   if(ll>=l && rr<=r)
-       return st[k].sum;
-       lli ans=0;   
-       if(intersectiontype1(ll,mid,l,r)==1)
-          ans=query(l,r,2*k+1);
-       if(intersectiontype1(1+mid,rr,l,r)==1)
-          ans+=query(l,r,2*k+2);
-          return ans;     
+	  if(st[k].lazy) shift(k);
+    int ll=st[k].l,rr=st[k].r;
+    if(ll>r || rr<l)return 0;
+    if(ll>=l && rr<=r)
+    return st[k].sum;
+    return query(l,r,2*k+1)+query(l,r,2*k+2);     
    }
    void update(int l,int r,lli x,int k=0)
    {
-	if(l>r)
-		return;
-   int ll=st[k].l,rr=st[k].r,mid=(ll+rr)/2;
+   int ll=st[k].l,rr=st[k].r;
+   if(ll>r || rr<l)return ;
    if(ll>=l && rr<=r)
          {st[k].lazyval=x;
           st[k].lazy=1;      
          return;}
-         if(st[k].lazy!=0)
+         if(st[k].lazy)
            shift(k);
-           if(st[k].l==st[k].r) return;
-   if(intersectiontype1(ll,mid,l,r)==1)
-      update(l,r,x,2*k+1);
-   if(intersectiontype1(mid+1,rr,l,r)==1)
-      update(l,r,x,2*k+2);
-      if(st[2*k+1].lazy!=0)
+           if(ll==rr) return;
+   update(l,r,x,2*k+1);
+   update(l,r,x,2*k+2);
+      if(st[2*k+1].lazy)
        shift(2*k+1);
-       if(st[2*k+2].lazy!=0)
+       if(st[2*k+2].lazy)
        shift(2*k+2);
     st[k].sum=st[2*k+1].sum+st[2*k+2].sum;           
    }
