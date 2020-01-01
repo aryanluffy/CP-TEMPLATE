@@ -258,8 +258,8 @@ class RMQ  //gives index of min-max in a given range
           return st[k].mx;
    	      int p1=maxquery(l,r,2*k+1);
    	      int p2=maxquery(l,r,2*k+2);
-       if(p1==-1)return st[k].mx=p2;
-       if(p2==-1)return st[k].mx=p1;
+       if(p1==-1)return p2;
+       if(p2==-1)return p1;
        if(h[p1]>=h[p2])p1;
        return p2;      
     }
