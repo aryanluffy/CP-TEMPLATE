@@ -165,13 +165,6 @@ class RMQv //returns max-min value in a given range
     };
 	v32 h;
 	vt <node> st;
- 
-    bool is_intersection(int l,int r,int ll,int rr)
-    {
-       if(r<ll || rr<l)
-         return 0;
-         return 1;
-    }
 	RMQv(v32 a)
 	{
        h=a;
@@ -187,7 +180,7 @@ class RMQv //returns max-min value in a given range
 		   }
 	    build(l,(l+r)>>1,2*k+1);
 	    build(((l+r)>>1)+1,r,2*k+2);
-        st[k].mx=max(st[2*k+1].mx,st[2*k+2].mx); 
+      st[k].mx=max(st[2*k+1].mx,st[2*k+2].mx); 
 	}
 	int maxquery(int l,int r,int k=0)
     {
@@ -224,13 +217,6 @@ class RMQ  //gives index of min-max in a given range
     };
 	v32 h;
 	vt <node> st;
- 
-    bool is_intersection(int l,int r,int ll,int rr)
-    {
-       if(r<ll || rr<l)
-         return 0;
-         return 1;
-    }
 	RMQ(v32 a)
 	{
        h=a;
@@ -309,11 +295,11 @@ class LAZY //currently set to set a given range by a value
    void shift(int k)
    {
    st[k].sum=(st[k].r-st[k].l+1)*st[k].lazyval;
-   if(st[k].l!=st[k].r)
-   {st[2*k+1].lazyval=st[k].lazyval;
-   st[2*k+2].lazyval=st[k].lazyval;
-   st[2*k+1].lazy=st[2*k+1].lazy=1;
-   st[2*k+2].lazy=st[2*k+2].lazy=1;}
+   if(st[k].l!=st[k].r){
+      st[2*k+1].lazyval=st[k].lazyval;
+      st[2*k+2].lazyval=st[k].lazyval;
+      st[2*k+1].lazy=st[2*k+2].lazy=1;
+   }
    st[k].lazyval=0;
    st[k].lazy=0;      
    }
@@ -330,19 +316,17 @@ class LAZY //currently set to set a given range by a value
    {
    int ll=st[k].l,rr=st[k].r;
    if(ll>r || rr<l)return ;
-   if(ll>=l && rr<=r)
-         {st[k].lazyval=x;
-          st[k].lazy=1;      
-         return;}
-         if(st[k].lazy)
-           shift(k);
-           if(ll==rr) return;
-   update(l,r,x,2*k+1);
-   update(l,r,x,2*k+2);
-      if(st[2*k+1].lazy)
-       shift(2*k+1);
-       if(st[2*k+2].lazy)
-       shift(2*k+2);
+   if(ll>=l && rr<=r){
+     st[k].lazyval=x;
+     st[k].lazy=1;      
+     return;
+    }
+    if(st[k].lazy) shift(k);
+    if(ll==rr) return;
+    update(l,r,x,2*k+1);
+    update(l,r,x,2*k+2);
+    if(st[2*k+1].lazy)  shift(2*k+1);
+    if(st[2*k+2].lazy)  shift(2*k+2);
     st[k].sum=st[2*k+1].sum+st[2*k+2].sum;           
    }
    int lower_bound(int l,int r,int val)
@@ -578,41 +562,28 @@ class merge_sort_tree
         build(l,(l+r)/2,2*k+1);
         build((l+r)/2+1,r,2*k+2);
       }
-    bool intersection(int l,int r,int ll,int rr)
-    {
-	  if(ll>r || l>rr)return 0;
-	  return 1;
-    }
     lli count_val_in_range(int l,int r,int t,int k=0)
     {
      if(l>r)return 0;
      int ll=st[k].l,rr=st[k].r,mid=(ll+rr)/2;
-     if(ll>=l && rr<=r)
-     return cnt(t,st[k].arr2);
-     lli ans=0;
-     if(intersection(l,r,ll,mid)==1)
-     ans+=count_val_in_range(l,r,t,2*k+1);
-     if(intersection(l,r,mid+1,rr)==1)
-     ans+=count_val_in_range(l,r,t,2*k+2);
-     return ans;
+     if(ll>r || l>rr)return 0;
+     if(ll>=l && rr<=r) return cnt(t,st[k].arr2);
+     return count_val_in_range(l,r,t,2*k+1)+count_val_in_range(l,r,t,2*k+2);
     }
     lli count_vals_less_than_given_val(int l,int r,int t,int k,vector<node> &st)
     {
      if(l>r)return 0;
      int ll=st[k].l,rr=st[k].r,mid=(ll+rr)/2;
-     if(ll>=l && rr<=r)
-     return get_last_smaller(st[k].arr2,t)+1;
+     if(l>rr || ll>r)return 0;
+     if(ll>=l && rr<=r) return get_last_smaller(st[k].arr2,t)+1;
      lli ans=0;
-     if(intersection(l,r,ll,mid)==1)
-     ans+=count_vals_less_than_given_val(l,r,t,2*k+1,st);
-     if(intersection(l,r,mid+1,rr)==1)
-     ans+=count_vals_less_than_given_val(l,r,t,2*k+2,st);
-     return ans;
+     return count_vals_less_than_given_val(l,r,t,2*k+1,st)+count_vals_less_than_given_val(l,r,t,2*k+2,st);   
     }	
     int find(int l,int r,int x,int k=0)
     {
      if(l>r)return -1;
      int ll=st[k].l,rr=st[k].r,mid=(ll+rr)/2;
+     if(l>rr || ll>r)return -1;
      if(ll>=l && rr<=r)
        { 
          int p=lower_bound(st[k].arr2.begin(), st[k].arr2.end(), x)-st[k].arr2.begin();
@@ -620,12 +591,12 @@ class merge_sort_tree
          if(st[k].arr2[p]==x)return st[k].arr[p].second;
          return -1;
        }
-       int ans=-1;
-     if(intersection(l,r,ll,mid)==1)
-     ans=find(l,r,x,2*k+1);
-     if(ans==-1 && intersection(l,r,mid+1,rr)==1)
-     ans=find(l,r,x,2*k+2);
-     return ans;
+     int x,y;
+     x=find(l,r,x,2*k+1);
+     y=find(l,r,x,2*k+2);
+     if(x==-1)return y;
+     if(y==-1)return x;
+     return x;
     }
 };
 lli tmod(lli x,lli m){return (x%m+m)%m;}//USE AT YOUR OWN RISK
