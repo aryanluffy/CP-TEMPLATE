@@ -591,12 +591,12 @@ class merge_sort_tree
          if(st[k].arr2[p]==x)return st[k].arr[p].second;
          return -1;
        }
-     int x,y;
-     x=find(l,r,x,2*k+1);
-     y=find(l,r,x,2*k+2);
-     if(x==-1)return y;
-     if(y==-1)return x;
-     return x;
+     int x2,y2;
+     x2=find(l,r,x,2*k+1);
+     y2=find(l,r,x,2*k+2);
+     if(x==-1)return y2;
+     if(y==-1)return x2;
+     return x2;
     }
 };
 lli tmod(lli x,lli m){return (x%m+m)%m;}//USE AT YOUR OWN RISK
