@@ -570,14 +570,14 @@ class merge_sort_tree
      if(ll>=l && rr<=r) return cnt(t,st[k].arr2);
      return count_val_in_range(l,r,t,2*k+1)+count_val_in_range(l,r,t,2*k+2);
     }
-    lli count_vals_less_than_given_val(int l,int r,int t,int k,vector<node> &st)
+    lli count_vals_less_than_given_val(int l,int r,int t,int k=0)
     {
      if(l>r)return 0;
      int ll=st[k].l,rr=st[k].r,mid=(ll+rr)/2;
      if(l>rr || ll>r)return 0;
      if(ll>=l && rr<=r) return get_last_smaller(st[k].arr2,t)+1;
      lli ans=0;
-     return count_vals_less_than_given_val(l,r,t,2*k+1,st)+count_vals_less_than_given_val(l,r,t,2*k+2,st);   
+     return count_vals_less_than_given_val(l,r,t,2*k+1)+count_vals_less_than_given_val(l,r,t,2*k+2);   
     }	
     int find(int l,int r,int x,int k=0)
     {
