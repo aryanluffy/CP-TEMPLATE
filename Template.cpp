@@ -29,9 +29,9 @@
 using namespace std;
 using namespace __gnu_pbds; 
 template <typename T> 
-void DEBUG_ARR(vt<T> a)
+void DEBUG_ARR(vt<T> a,char c)
 {
-	f(i,0,a.size())cout<<a[i]<<" ";
+	f(i,0,a.size())cout<<a[i]<<c;
 	cout<<"\n";
 }
 
