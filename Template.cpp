@@ -599,7 +599,7 @@ class merge_sort_tree
      return x2;
     }
 };
-lli tmod(lli x,lli m){return (x%m+m)%m;}//USE AT YOUR OWN RISK
+lli tmod(lli x,lli m=mod){return (x%m+m)%m;}//USE AT YOUR OWN RISK
 lli power(lli x, lli y) 
 {
     lli res = 1;  
@@ -615,7 +615,7 @@ lli power(lli x, lli y)
        res+=mod; 
     return res; 
 }
-lli modInverse(lli a, lli m) 
+lli modInverse(lli a, lli m=mod) 
 {
     lli m0 = m; 
     lli y = 0, x = 1; 
