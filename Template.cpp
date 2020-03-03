@@ -28,7 +28,7 @@
 #define min_p_q priority_queue <int,vt <int>,greater <int>>
 using namespace std;
 using namespace __gnu_pbds; 
-template <typename T> 
+
 class ConvexHullOptimization{
     public:
     struct line{
@@ -73,6 +73,7 @@ class ConvexHullOptimization{
         return evaluate(x,STACK[id]);
     }
 };
+template <typename T> 
 void DEBUG_ARR(vt<T> a,char c)
 {
 	f(i,0,a.size())cout<<a[i]<<c;
@@ -638,8 +639,8 @@ class merge_sort_tree
      int x2,y2;
      x2=find(l,r,x,2*k+1);
      y2=find(l,r,x,2*k+2);
-     if(x==-1)return y2;
-     if(y==-1)return x2;
+     if(x2==-1)return y2;
+     if(y2==-1)return x2;
      return x2;
     }
 };
