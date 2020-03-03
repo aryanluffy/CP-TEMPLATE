@@ -29,6 +29,50 @@
 using namespace std;
 using namespace __gnu_pbds; 
 template <typename T> 
+class ConvexHullOptimization{
+    public:
+    struct line{
+        lli m,c;    //y=m*x+c
+    };
+    deque <line> STACK;
+    vt <ld> points;
+    ld IntersectionOfLines(line X,line Y){
+        if(X.m==Y.m)return MAXN;
+        return ((ld)(Y.c-X.c))/((ld)(X.m-Y.m));
+    }
+    lli evaluate(lli x,line X){
+        return X.m*x+X.c;
+    }
+    void addline(line X){
+        if(STACK.size()==0){
+            STACK.push_back(X);
+            return;
+        }
+        if(STACK.size()==1){
+            points.push_back(IntersectionOfLines(X,STACK.back()));
+            STACK.push_back(X);
+            return;
+        }
+        while(points.size()){
+                line l1=STACK.back();  // l1 is the line with maximal slope in the STACK
+                STACK.pop_back();
+                line l2=STACK.back();  // l2 is the line second largest slope in the STACK
+                if(points.back()<IntersectionOfLines(l1,X)){
+                    STACK.push_back(l1);
+                    break;
+                }
+                else{
+                    points.pop_back();
+                }
+        }
+            points.push_back(IntersectionOfLines(STACK.back(),X));
+            STACK.push_back(X);
+    }
+    lli FindBest(lli x){
+        int id=lower_bound(points.begin(),points.end(),x)-points.begin();
+        return evaluate(x,STACK[id]);
+    }
+};
 void DEBUG_ARR(vt<T> a,char c)
 {
 	f(i,0,a.size())cout<<a[i]<<c;
