@@ -29,6 +29,8 @@
 using namespace std;
 using namespace __gnu_pbds; 
 
+//The lines must have distinct slopes
+//To create line object 'x' outside class do ConvexHullOptimization::line x;
 class ConvexHullOptimization{
     public:
     struct line{
