@@ -646,7 +646,9 @@ class merge_sort_tree
      return x2;
     }
 };
-lli tmod(lli x,lli m=mod){return (x%m+m)%m;}//USE AT YOUR OWN RISK
+//USE AT YOUR OWN RISK
+lli tmod(lli x,lli m=mod){return (x%m+m)%m;}
+//make sure x is below mod
 lli power(lli x, lli y) 
 {
     lli res = 1;  
