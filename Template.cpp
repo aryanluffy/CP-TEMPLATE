@@ -30,6 +30,7 @@ using namespace std;
 using namespace __gnu_pbds; 
 
 //The lines must have distinct slopes
+//But the trick still works with duplicate slopes just keep the best one among duplicate slopes in the stack
 //To create line object 'x' outside class do ConvexHullOptimization::line x;
 class ConvexHullOptimization{
     public:
